@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 可以嗎？｜AI Ethics 判斷卡</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FFF8EE;
+    --pink:#FF8FA8; --pink-deep:#FF6B93;
+    --sky:#5EC4E8; --sky-deep:#3AAAD1;
+    --yellow:#FFC94D; --yellow-deep:#E8A800;
+    --green:#66C08B; --green-deep:#4CAA72;
+    --purple:#B99CE8; --purple-deep:#9A72D6;
+    --red:#FF6B6B; --red-deep:#E85454;
+    --ink:#2E2A3B; --ink-soft:#6E6885;
+    --card:#FFFFFF;
+    --shadow: 0 10px 0 rgba(46,42,59,0.08);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(circle at 12% 15%, #FFEFD1 0%, transparent 45%),
+      radial-gradient(circle at 88% 20%, #D8F3FF 0%, transparent 40%),
+      radial-gradient(circle at 20% 90%, #FFE1EB 0%, transparent 45%),
+      var(--cream);
+    font-family:'Nunito', sans-serif;
+    color:var(--ink);
+    display:flex; justify-content:center;
+    padding:24px 14px 60px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .stage{width:100%; max-width:600px;}
+  header{text-align:center; margin-bottom:14px;}
+  .brand{
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--card); padding:8px 18px 8px 10px; border-radius:999px;
+    box-shadow:var(--shadow); border:3px solid var(--ink);
+  }
+  .brand .badge{
+    width:34px;height:34px;border-radius:50%; background:var(--purple);
+    display:flex;align-items:center;justify-content:center; font-size:18px; border:3px solid var(--ink);
+  }
+  .brand span{font-family:'Baloo 2', sans-serif; font-weight:800; font-size:16px;}
+  h1{font-family:'Baloo 2', sans-serif; font-size:clamp(21px,6vw,28px); margin:14px 0 4px; font-weight:800; text-align:center;}
+  .subtitle{color:var(--ink-soft); font-size:13.5px; font-weight:600; text-align:center;}
+
+  .mascot-row{display:flex; justify-content:center; margin:14px 0 6px;}
+  #mascot{width:78px;height:78px; transition:transform .35s cubic-bezier(.68,-0.4,.27,1.55);}
+  .bubble{
+    max-width:420px; margin:0 auto 4px; background:var(--card); border:3px solid var(--ink);
+    border-radius:18px; padding:10px 16px; font-weight:700; font-size:13px; text-align:center;
+    min-height:20px; box-shadow:var(--shadow);
+  }
+
+  .panel{
+    background:var(--card); border:4px solid var(--ink); border-radius:26px;
+    padding:22px 20px; margin-top:16px; box-shadow:var(--shadow);
+  }
+  .hidden{display:none !important;}
+
+  .cta-btn{
+    display:block; margin:20px auto 0; font-family:'Baloo 2', sans-serif; font-weight:800;
+    font-size:15px; background:var(--yellow); border:4px solid var(--ink); border-radius:18px;
+    padding:13px 28px; cursor:pointer; box-shadow:0 6px 0 rgba(46,42,59,0.18);
+    transition:transform .08s ease, box-shadow .08s ease;
+  }
+  .cta-btn:active{transform:translateY(4px); box-shadow:0 2px 0 rgba(46,42,59,0.18);}
+  .cta-btn:disabled{opacity:.4; cursor:default;}
+  .cta-btn.small{font-size:12.5px; padding:9px 18px; margin:8px auto 0;}
+  .btn-row{display:flex; gap:10px; justify-content:center; flex-wrap:wrap;}
+
+  /* intro concepts */
+  .concept-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:14px 0;}
+  .concept-item{
+    background:var(--cream); border:3px solid var(--ink); border-radius:16px; padding:10px; text-align:center;
+  }
+  .concept-item .c-emoji{font-size:24px;}
+  .concept-item b{font-family:'Baloo 2', sans-serif; font-size:13px; display:block; margin-top:4px;}
+  .concept-item p{font-size:10.5px; color:var(--ink-soft); font-weight:600; margin:2px 0 0;}
+
+  .why-ai-box{
+    margin-top:10px; background:var(--cream); border:3px dashed var(--ink); border-radius:16px;
+    padding:12px 14px; font-size:12.5px; font-weight:600; color:var(--ink-soft); line-height:1.6;
+  }
+  .why-ai-box b{color:var(--ink);}
+
+  /* scenario */
+  .case-progress{display:flex; justify-content:center; gap:6px; margin:0 0 14px; flex-wrap:wrap;}
+  .dot{width:11px;height:11px;border-radius:50%; background:#EDE7F5; border:2px solid var(--ink); transition:transform .2s ease;}
+  .dot.done{background:var(--purple);}
+  .dot.current{transform:scale(1.35);}
+
+  .scenario-box{
+    background:var(--cream); border:3px solid var(--ink); border-radius:18px; padding:16px; text-align:center;
+    margin-bottom:16px;
+  }
+  .scenario-box .sc-emoji{font-size:38px;}
+  .scenario-box .sc-text{font-family:'Baloo 2', sans-serif; font-weight:800; font-size:15px; margin-top:6px; line-height:1.5;}
+
+  .yesno-row{display:flex; gap:10px; margin-bottom:16px;}
+  .yn-btn{
+    flex:1; font-family:'Baloo 2', sans-serif; font-weight:800; font-size:14px; padding:14px 6px;
+    border-radius:16px; border:4px solid var(--ink); cursor:pointer; color:var(--ink);
+    box-shadow:0 5px 0 rgba(46,42,59,0.18); transition:transform .08s ease;
+  }
+  .yn-btn:active{transform:translateY(3px);}
+  .yn-btn[data-v="yes"]{background:#fff;}
+  .yn-btn[data-v="yes"].selected{background:var(--green);}
+  .yn-btn[data-v="no"]{background:#fff;}
+  .yn-btn[data-v="no"].selected{background:var(--red);}
+  .yn-btn[data-v="maybe"]{background:#fff;}
+  .yn-btn[data-v="maybe"].selected{background:var(--yellow);}
+
+  .field label{font-family:'Baloo 2', sans-serif; font-weight:800; font-size:13px; display:block; margin:10px 0 6px;}
+  textarea.text-input{
+    width:100%; min-height:70px; border:3px solid var(--ink); border-radius:14px; padding:9px 12px; font-size:13px;
+    font-weight:600; font-family:'Nunito',sans-serif; color:var(--ink); resize:vertical;
+  }
+  .chip-row{display:flex; flex-wrap:wrap; gap:8px; margin-top:4px;}
+  .chip{
+    font-size:12px; font-weight:700; padding:7px 11px; border-radius:12px; border:3px solid var(--ink);
+    background:#fff; cursor:pointer;
+  }
+  .chip.selected{background:var(--sky);}
+
+  .reflect-box{
+    margin-top:14px; background:#FFF3D6; border:3px solid var(--ink); border-radius:16px; padding:12px 14px;
+    font-size:12px; font-weight:600; line-height:1.7; display:none;
+  }
+  .reflect-box.show{display:block;}
+  .reflect-box b{font-family:'Baloo 2', sans-serif;}
+
+  /* gallery */
+  .gallery-grid{display:grid; grid-template-columns:1fr; gap:14px; margin-top:6px;}
+  @media (min-width:480px){ .gallery-grid{grid-template-columns:1fr 1fr;} }
+  .judge-card{
+    border:4px solid var(--ink); border-radius:20px; padding:14px; background:linear-gradient(160deg,#fff, var(--cream));
+    box-shadow:0 8px 0 rgba(46,42,59,0.12);
+  }
+  .judge-card .jc-scenario{font-family:'Baloo 2', sans-serif; font-weight:800; font-size:13px; line-height:1.5; margin-bottom:8px;}
+  .jc-answer-badge{
+    display:inline-block; font-family:'Baloo 2', sans-serif; font-weight:800; font-size:12px; padding:4px 12px;
+    border-radius:999px; border:2.5px solid var(--ink); margin-bottom:8px;
+  }
+  .jc-answer-badge.yes{background:var(--green); color:#fff;}
+  .jc-answer-badge.no{background:var(--red); color:#fff;}
+  .jc-answer-badge.maybe{background:var(--yellow);}
+  .judge-card .jc-why{font-size:11.5px; font-weight:600; line-height:1.6; margin-bottom:8px;}
+  .jc-tags{display:flex; flex-wrap:wrap; gap:4px;}
+  .jc-tag{font-size:9.5px; font-weight:800; padding:3px 8px; border-radius:999px; background:var(--purple-deep); color:#fff;}
+
+  footer{text-align:center; margin-top:26px; font-size:12px; color:var(--ink-soft); font-weight:600;}
+
+  @media print{
+    body{padding:0; background:#fff;}
+    header, .mascot-row, .bubble, footer, .btn-row{display:none !important;}
+  }
+  @media (prefers-reduced-motion: reduce){*{transition:none !important; animation:none !important;}}
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <header>
+    <div class="brand">
+      <div class="badge">⚖️</div>
+      <span>AI 可以嗎？</span>
+    </div>
+    <h1>AI Ethics 判斷卡</h1>
+    <div class="subtitle">沒有標準答案，重點是你怎麼想</div>
+  </header>
+
+  <div class="mascot-row">
+    <svg id="mascot" viewBox="0 0 100 100">
+      <ellipse cx="50" cy="90" rx="26" ry="6" fill="#00000012"/>
+      <rect x="30" y="34" width="40" height="34" rx="12" fill="#FFC94D" stroke="#2E2A3B" stroke-width="4"/>
+      <circle cx="50" cy="20" r="18" fill="#FFFFFF" stroke="#2E2A3B" stroke-width="4"/>
+      <circle cx="43" cy="19" r="3.4" fill="#2E2A3B" id="eyeL"/>
+      <circle cx="57" cy="19" r="3.4" fill="#2E2A3B" id="eyeR"/>
+      <path d="M43 27 Q50 32 57 27" stroke="#2E2A3B" stroke-width="3" fill="none" stroke-linecap="round" id="mouth"/>
+      <rect x="47" y="2" width="6" height="10" rx="3" fill="#2E2A3B"/>
+      <circle cx="50" cy="3" r="4" fill="#FF6B93" stroke="#2E2A3B" stroke-width="2.5"/>
+      <rect x="16" y="42" width="14" height="9" rx="4" fill="#5EC4E8" stroke="#2E2A3B" stroke-width="3.5"/>
+      <rect x="70" y="42" width="14" height="9" rx="4" fill="#5EC4E8" stroke="#2E2A3B" stroke-width="3.5"/>
+    </svg>
+  </div>
+  <div class="bubble" id="bubble">歡迎來到「AI 可以嗎？」！這裡沒有唯一正確答案，我們要練習好好思考 🤔</div>
+
+  <!-- PHASE 0: INTRO -->
+  <div class="panel" id="phase-intro">
+    <div class="concept-grid">
+      <div class="concept-item"><div class="c-emoji">🔒</div><b>Privacy 隱私</b><p>個人資料該由誰決定？</p></div>
+      <div class="concept-item"><div class="c-emoji">©️</div><b>Copyright 著作權</b><p>誰才是真正的創作者？</p></div>
+      <div class="concept-item"><div class="c-emoji">⚖️</div><b>Fairness 公平</b><p>對每個人都一樣公平嗎？</p></div>
+      <div class="concept-item"><div class="c-emoji">🙋</div><b>Responsibility 責任</b><p>誰該為結果負責？</p></div>
+    </div>
+    <div class="why-ai-box">
+      💡 <b>為什麼要學這個？這跟 AI 有什麼關係？</b><br>
+      AI 讓很多事情變得很容易做到——寫作業、做假照片、記住你的資料、幫你打分數……但「做得到」不代表「應該做」。因為 AI 能力太強大，我們需要用隱私、著作權、公平、責任這幾個角度，重新想一想什麼是對的做法。這堂課沒有老師會打勾或打叉，重點是練習你自己的判斷力！
+    </div>
+    <button class="cta-btn" id="btn-start">🚀 開始判斷</button>
+  </div>
+
+  <!-- PHASE 1: SCENARIOS -->
+  <div class="panel hidden" id="phase-scenario">
+    <div class="case-progress" id="case-progress"></div>
+    <div class="scenario-box">
+      <div class="sc-emoji" id="sc-emoji">📝</div>
+      <div class="sc-text" id="sc-text"></div>
+    </div>
+    <div class="yesno-row">
+      <div class="yn-btn" data-v="yes">✅ YES</div>
+      <div class="yn-btn" data-v="no">❌ NO</div>
+      <div class="yn-btn" data-v="maybe">🤔 MAYBE</div>
+    </div>
+    <div class="field">
+      <label>這跟哪些概念有關？（可選多個）</label>
+      <div class="chip-row" id="chips-concept"></div>
+    </div>
+    <div class="field">
+      <label>WHY? 說說你的理由</label>
+      <textarea class="text-input" id="in-why" placeholder="說說看你為什麼這樣判斷..."></textarea>
+    </div>
+    <button class="cta-btn" id="btn-reveal" disabled>💭 看看還可以多想什麼</button>
+    <div class="reflect-box" id="reflect-box"></div>
+    <button class="cta-btn hidden" id="btn-next-scenario">下一題 →</button>
+  </div>
+
+  <!-- PHASE 2: GALLERY -->
+  <div class="panel hidden" id="phase-gallery">
+    <div style="font-family:'Baloo 2',sans-serif; font-weight:800; font-size:17px; text-align:center; margin-bottom:6px;">
+      🏆 我的「AI 可以嗎？」判斷卡
+    </div>
+    <p style="text-align:center; font-size:12px; color:var(--ink-soft); font-weight:600; margin-top:0;">
+      五張卡片，記錄了你這次的判斷和理由。
+    </p>
+    <div class="gallery-grid" id="gallery-grid"></div>
+    <div class="btn-row">
+      <button class="cta-btn small" id="btn-print">🖨️ 列印我的判斷卡</button>
+      <button class="cta-btn small" id="btn-restart">🔁 重新判斷一次</button>
+    </div>
+  </div>
+
+  <footer>小提醒：不同的人、不同的情況，答案可能不一樣——重要的是你能不能說出合理的理由。</footer>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+const CONCEPTS = ["🔒 Privacy 隱私","©️ Copyright 著作權","⚖️ Fairness 公平","🙋 Responsibility 責任"];
+
+const SCENARIOS = [
+  {
+    emoji:"📝",
+    text:"情境一：AI 幫你寫完整的作業，可以直接交嗎？",
+    reflect:"多想一步：如果直接交出去，這份作業還能代表你自己學會了嗎？如果同學也都這樣做，對認真自己寫的人公平嗎？不同老師、不同學校對這件事可能有不同規定，最保險的做法是先問過老師可不可以用 AI 幫忙。"
+  },
+  {
+    emoji:"🖼️",
+    text:"情境二：AI 幫你製作同學的假照片，可以嗎？",
+    reflect:"多想一步：這可能會傷害到同學的感受，甚至讓別人誤會、造成傷害。未經同意使用別人的臉，也牽涉到隱私與尊重。就算只是覺得好玩，後果可能超過你的想像，一旦傳出去就很難收回。"
+  },
+  {
+    emoji:"🔐",
+    text:"情境三：AI 偷偷記住你的私人資料，可以嗎？",
+    reflect:"多想一步：你的個人資料應該由你自己決定要不要分享。「偷偷」代表沒有經過你的同意，這通常是不恰當的。好的 AI 服務應該清楚告訴你它會收集什麼資料，並讓你自己選擇要不要提供。"
+  },
+  {
+    emoji:"🧠",
+    text:"情境四：AI 決定誰比較聰明，可以嗎？",
+    reflect:"多想一步：「聰明」有很多種面向，例如語言、數學、藝術、體育，AI 很難用單一標準完整判斷一個人。如果 AI 學習的資料本身就有偏見，判斷結果也會不公平。重要的決定，還是需要人來做最後的判斷，而不是完全交給 AI。"
+  },
+  {
+    emoji:"🎨",
+    text:"情境五：AI 創作的圖片可以直接說「這是我畫的」嗎？",
+    reflect:"多想一步：如果完全是 AI 生成的，說「這是我畫的」可能會誤導別人。比較誠實的說法可能是「這是我用 AI 協助創作的」。誠實標示 AI 的參與，是對自己和觀眾負責任的態度。"
+  },
+];
+
+let idx = 0;
+let answers = []; // {choice, concepts:[], why}
+
+function setMascot(state){
+  const mouth = $('mouth'), mascot = $('mascot');
+  if(state==='happy'){ mouth.setAttribute('d','M43 26 Q50 34 57 26'); mascot.style.transform='rotate(-6deg) scale(1.06)'; }
+  else { mouth.setAttribute('d','M43 27 Q50 32 57 27'); mascot.style.transform='rotate(0deg) scale(1)'; }
+}
+function showPhase(id){
+  ['phase-intro','phase-scenario','phase-gallery'].forEach(p=>$(p).classList.toggle('hidden', p!==id));
+}
+
+$('btn-start').addEventListener('click', ()=>{
+  showPhase('phase-scenario');
+  $('bubble').textContent = '仔細想想這個情境，選一個答案，再說說你的理由！';
+  buildProgress();
+  idx = 0;
+  loadScenario();
+});
+
+function buildProgress(){
+  const el = $('case-progress');
+  el.innerHTML = '';
+  SCENARIOS.forEach((_, i)=>{
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.id = 'sdot-'+i;
+    el.appendChild(d);
+  });
+}
+function updateProgress(){
+  SCENARIOS.forEach((_, i)=>{
+    const d = $('sdot-'+i);
+    d.classList.toggle('current', i===idx);
+    d.classList.toggle('done', i<idx);
+  });
+}
+
+let currentChoice = null;
+let currentConcepts = [];
+
+function loadScenario(){
+  if(idx >= SCENARIOS.length){
+    showGallery();
+    return;
+  }
+  updateProgress();
+  const s = SCENARIOS[idx];
+  $('sc-emoji').textContent = s.emoji;
+  $('sc-text').textContent = s.text;
+  currentChoice = null;
+  currentConcepts = [];
+  document.querySelectorAll('.yn-btn').forEach(b=>b.classList.remove('selected'));
+  $('in-why').value = '';
+  $('reflect-box').classList.remove('show');
+  $('reflect-box').innerHTML = '';
+  $('btn-reveal').classList.remove('hidden');
+  $('btn-reveal').disabled = true;
+  $('btn-next-scenario').classList.add('hidden');
+  renderConceptChips();
+}
+
+document.querySelectorAll('.yn-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.yn-btn').forEach(b=>b.classList.remove('selected'));
+    btn.classList.add('selected');
+    currentChoice = btn.dataset.v;
+    checkReady();
+  });
+});
+
+function renderConceptChips(){
+  const row = $('chips-concept');
+  row.innerHTML = '';
+  CONCEPTS.forEach(c=>{
+    const chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = c;
+    chip.addEventListener('click', ()=>{
+      const i = currentConcepts.indexOf(c);
+      if(i>=0){ currentConcepts.splice(i,1); chip.classList.remove('selected'); }
+      else { currentConcepts.push(c); chip.classList.add('selected'); }
+    });
+    row.appendChild(chip);
+  });
+}
+
+$('in-why').addEventListener('input', checkReady);
+function checkReady(){
+  $('btn-reveal').disabled = !(currentChoice && $('in-why').value.trim());
+}
+
+$('btn-reveal').addEventListener('click', ()=>{
+  const s = SCENARIOS[idx];
+  const box = $('reflect-box');
+  box.innerHTML = s.reflect;
+  box.classList.add('show');
+  $('btn-reveal').classList.add('hidden');
+  $('btn-next-scenario').classList.remove('hidden');
+  setMascot('happy');
+
+  answers[idx] = {
+    choice: currentChoice,
+    concepts: [...currentConcepts],
+    why: $('in-why').value.trim(),
+  };
+});
+
+$('btn-next-scenario').addEventListener('click', ()=>{
+  idx++;
+  loadScenario();
+});
+
+function showGallery(){
+  showPhase('phase-gallery');
+  $('bubble').textContent = '完成了！你已經練習了五種 AI 倫理判斷 🎉';
+  setMascot('happy');
+  const grid = $('gallery-grid');
+  grid.innerHTML = '';
+  SCENARIOS.forEach((s, i)=>{
+    const a = answers[i] || {choice:'maybe', concepts:[], why:''};
+    const el = document.createElement('div');
+    el.className = 'judge-card';
+    const badgeLabel = a.choice === 'yes' ? '✅ YES' : a.choice === 'no' ? '❌ NO' : '🤔 MAYBE';
+    const tagsHtml = a.concepts.map(c=>`<span class="jc-tag">${c.split(' ')[1] || c}</span>`).join('');
+    el.innerHTML = `
+      <div class="jc-scenario">${s.emoji} ${s.text}</div>
+      <div class="jc-answer-badge ${a.choice}">${badgeLabel}</div>
+      <div class="jc-why">💭 ${escapeHtml(a.why || '（未填寫理由）')}</div>
+      <div class="jc-tags">${tagsHtml}</div>
+    `;
+    grid.appendChild(el);
+  });
+}
+
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str || '';
+  return div.innerHTML;
+}
+
+$('btn-print').addEventListener('click', ()=>window.print());
+
+$('btn-restart').addEventListener('click', ()=>{
+  idx = 0; answers = []; currentChoice = null; currentConcepts = [];
+  showPhase('phase-intro');
+  $('bubble').textContent = '歡迎來到「AI 可以嗎？」！這裡沒有唯一正確答案，我們要練習好好思考 🤔';
+  setMascot('neutral');
+});
+</script>
+</body>
+</html>
